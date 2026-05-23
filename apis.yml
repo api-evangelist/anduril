@@ -1,0 +1,150 @@
+aid: anduril
+name: Anduril Industries
+description: |
+  Anduril Industries builds AI-defined defense products that pair purpose-built
+  hardware with the Lattice software platform to give operators a unified,
+  machine-speed view of the battlespace. The company's portfolio spans autonomous
+  air, ground, and maritime systems (Ghost, Anvil, Bolt, ALTIUS, Dive-LD,
+  Roadrunner) along with command-and-control software and counter-UAS systems.
+  Lattice OS is the connective tissue: it ingests sensor and effector data across
+  vendors and exposes it as a common data fabric for both Anduril operators and
+  partner developers. A public Lattice Developer Portal and multi-language SDKs
+  (Python, Go, Java, JavaScript) document the Entities, Tasks, and Objects APIs
+  for partners integrating sensors, effectors, and mission applications. Access to
+  live Lattice environments is partner-gated and subject to U.S. export controls
+  (ITAR/EAR).
+type: Index
+position: Provider
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Defense
+  - Autonomy
+  - Lattice
+  - Command and Control
+  - C2
+  - Sensors
+  - Effectors
+  - Counter-UAS
+  - Unmanned Systems
+  - Mission Software
+  - Edge AI
+  - ITAR
+url: https://raw.githubusercontent.com/api-evangelist/anduril/refs/heads/main/apis.yml
+created: '2026-05-23'
+modified: '2026-05-23'
+specificationVersion: '0.20'
+apis:
+  - aid: anduril:lattice-sdk
+    name: Anduril Lattice SDK
+    description: |
+      The Lattice SDK provides programmatic access to Anduril's Lattice platform
+      so partners can publish entities, issue tasks to connected agents, and
+      exchange binary objects across a shared mission data fabric. The SDK
+      supports both REST/JSON and gRPC/Protobuf transports, with OAuth client
+      credentials or bearer-token authentication. Live API access is gated to
+      qualified defense partners under export-control restrictions.
+    humanURL: https://developer.anduril.com/
+    baseURL: https://developer.anduril.com
+    tags:
+      - Lattice
+      - Entities
+      - Tasks
+      - Objects
+      - gRPC
+      - REST
+      - Defense SDK
+      - Mission Autonomy
+    properties:
+      - type: Documentation
+        url: https://developer.anduril.com/
+      - type: APIReference
+        url: https://developer.anduril.com/reference/overview/overview
+      - type: Concepts
+        url: https://developer.anduril.com/guides/concepts/overview
+      - type: ProductPage
+        url: https://www.anduril.com/lattice/lattice-sdk/
+      - type: SDKPython
+        url: https://github.com/anduril/lattice-sdk-python
+      - type: SDKGo
+        url: https://github.com/anduril/lattice-sdk-go
+      - type: SDKJava
+        url: https://github.com/anduril/lattice-sdk-java
+      - type: SDKJavaScript
+        url: https://github.com/anduril/lattice-sdk-javascript
+      - type: PyPI
+        url: https://pypi.org/project/anduril-lattice-sdk/
+      - type: SchemaRegistry
+        url: https://buf.build/anduril/lattice-sdk
+      - type: GitHubOrganization
+        url: https://github.com/anduril
+    features:
+      - name: Entities API
+        description: Publish, update, and query entities representing anything of operational significance (assets, tracks, geos, sensors).
+      - name: Tasks API
+        description: Send sequential commands to agents connected to Lattice and observe task lifecycle and acknowledgements.
+      - name: Objects API
+        description: Store and retrieve distributed binary objects (imagery, telemetry, payloads) in the Lattice data fabric.
+      - name: Dual Transport
+        description: Choose REST/JSON for rapid web integrations or gRPC/Protocol Buffers for bandwidth-constrained edge and hardware integrations.
+      - name: Multi-Language SDKs
+        description: First-party client libraries for Python, Go, Java, and JavaScript/TypeScript with sync and async support.
+      - name: OAuth and Bearer Token Auth
+        description: OAuth client credentials flow or direct bearer tokens for service-to-service authentication.
+      - name: Streaming and Pagination
+        description: Server-streamed event subscriptions and cursor-based pagination for high-throughput integrations.
+      - name: Schema Registry
+        description: Versioned Protobuf schemas published to Buf Schema Registry for reproducible code generation.
+    useCases:
+      - name: Sensor Integration
+        description: Connect new sensors (radar, EO/IR, RF, sonar) into Lattice so detections are normalized into the shared entity model.
+      - name: Effector Integration
+        description: Expose third-party effectors and platforms as taskable agents in Lattice for coordinated mission execution.
+      - name: Mission Application Development
+        description: Build operator-facing applications on top of the Lattice data fabric without re-implementing track fusion or C2 plumbing.
+      - name: Simulation and Test
+        description: Drive Lattice with synthetic entities for training, simulation, and rehearsal workflows.
+      - name: Cross-Vendor Interoperability
+        description: Translate between vendor-specific data models and the Lattice common operating picture.
+    integrations:
+      - name: Ghost (Anduril sUAS)
+      - name: Anvil (counter-UAS interceptor)
+      - name: Bolt (man-portable strike UAS)
+      - name: ALTIUS (loitering munition family)
+      - name: Dive-LD (autonomous underwater vehicle)
+      - name: Roadrunner (modular reusable interceptor)
+      - name: Sentry Tower
+      - name: Pulsar (electromagnetic warfare)
+      - name: Menace (expeditionary C2)
+      - name: Buf Schema Registry
+    authentication:
+      - type: OAuth2
+        description: OAuth 2.0 client credentials flow with bearer token issuance for service-to-service access.
+      - type: BearerToken
+        description: Direct bearer-token authentication for partner-issued tokens.
+      - type: PartnerGated
+        description: Production Lattice environments are partner-gated and subject to U.S. export controls (ITAR/EAR).
+common:
+  - type: Website
+    url: https://www.anduril.com/
+  - type: DeveloperPortal
+    url: https://developer.anduril.com/
+  - type: Lattice
+    url: https://www.anduril.com/lattice/
+  - type: LatticeSDK
+    url: https://www.anduril.com/lattice/lattice-sdk/
+  - type: Products
+    url: https://www.anduril.com/hardware/
+  - type: Careers
+    url: https://www.anduril.com/careers/
+  - type: GitHub
+    url: https://github.com/anduril
+  - type: SchemaRegistry
+    url: https://buf.build/anduril/lattice-sdk
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/anduril-industries/
+  - type: News
+    url: https://www.anduril.com/article/
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
