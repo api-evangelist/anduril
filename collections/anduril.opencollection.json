@@ -1,0 +1,461 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anduril Lattice REST API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OAuth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Issue an access token (client credentials grant)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/oauth/token",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "grant_type",
+                  "value": ""
+                },
+                {
+                  "name": "client_id",
+                  "value": ""
+                },
+                {
+                  "name": "client_secret",
+                  "value": ""
+                },
+                {
+                  "name": "scope",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Exchange client_id and client_secret for a short-lived bearer access token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Publish an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/entities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Publish (create or update) an entity for ingest into the Lattice data fabric. Upsert is keyed by entity ID and provenance timestamp."
+        },
+        {
+          "info": {
+            "name": "Get an entity by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/entities/:entity_id",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the entity."
+              }
+            ]
+          },
+          "docs": "Get an entity by ID"
+        },
+        {
+          "info": {
+            "name": "Override fields on an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.{environment}.anduril.com/entities/:entity_id/override",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the entity."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Override specific overridable fields on an entity using a field path."
+        },
+        {
+          "info": {
+            "name": "Clear an override",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.{environment}.anduril.com/entities/:entity_id/override/:field_path",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the entity."
+              },
+              {
+                "name": "field_path",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Clear an override value previously set on the specified field path."
+        },
+        {
+          "info": {
+            "name": "Long-poll entity events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/entities/events:longPoll",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Long-poll connection returning pre-existing and new entity events with session tokens for resumption."
+        },
+        {
+          "info": {
+            "name": "Stream entities (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/entities:stream"
+          },
+          "docs": "Server-Sent Events stream of real-time entity data with filtering options."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new task with an auto-generated or specified ID; initializes with STATUS_CREATED."
+        },
+        {
+          "info": {
+            "name": "Get a task by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ]
+          },
+          "docs": "Get a task by ID"
+        },
+        {
+          "info": {
+            "name": "Update task status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id/status",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update task status as it progresses; increments status_version for optimistic consistency."
+        },
+        {
+          "info": {
+            "name": "Cancel a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id:cancel",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ]
+          },
+          "docs": "Immediate cancellation if the task has not been sent to an agent; otherwise routes to the agent for decision."
+        },
+        {
+          "info": {
+            "name": "Query tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks:query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search tasks by parent ID, status, time range, assignee, and type. Paginated."
+        },
+        {
+          "info": {
+            "name": "Stream tasks (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks:stream"
+          },
+          "docs": "SSE stream delivering existing non-terminal tasks and real-time updates with heartbeats."
+        },
+        {
+          "info": {
+            "name": "Long-poll as an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks:listenAsAgent",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Long-poll connection for agents to receive ExecuteRequest, CancelRequest, and CompleteRequest messages."
+        },
+        {
+          "info": {
+            "name": "Stream as an agent (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks:streamAsAgent"
+          },
+          "docs": "SSE stream for agents to receive task requests (Execute, Cancel, Complete) with heartbeats."
+        },
+        {
+          "info": {
+            "name": "Stream manual control frames (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id/manualControlFrames:stream",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ]
+          },
+          "docs": "SSE stream delivering manual control frames to the executing agent; terminates at task completion."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Objects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects",
+            "params": [
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List objects with optional prefix filtering; returns local objects by default."
+        },
+        {
+          "info": {
+            "name": "List deleted objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects:listDeleted",
+            "params": [
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve paginated records of force-distributed deleted objects with path and checksum pairs."
+        },
+        {
+          "info": {
+            "name": "Fetch object content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Fetch object content; supports compression and priority preferences."
+        },
+        {
+          "info": {
+            "name": "Upload an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Upload an object up to 1 GiB in size."
+        },
+        {
+          "info": {
+            "name": "Delete an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Delete an object"
+        },
+        {
+          "info": {
+            "name": "Get object metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path:metadata",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Retrieve object metadata including size, expiry time, and last update timestamp."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
