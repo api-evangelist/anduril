@@ -1,0 +1,15 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/anduril-openapi.yml
+docs: https://developer.anduril.com/reference/rest/oauth/get-token
+note: Anduril Lattice uses the OAuth 2.0 client credentials flow with no published
+  scope catalog; the token endpoint accepts no scope parameter and access is governed
+  by partner-gated client credentials (https://developer.anduril.com/reference/rest/oauth/get-token).
+schemes:
+- name: oauth2ClientCredentials
+  source: openapi/anduril-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.developer.anduril.com/oauth/token
+  description: OAuth 2.0 client credentials flow for service-to-service access.
+scopes: []

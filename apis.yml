@@ -125,6 +125,8 @@ apis:
       - type: PartnerGated
         description: Production Lattice environments are partner-gated and subject to U.S. export controls (ITAR/EAR).
 common:
+  - type: OAuthScopes
+    url: scopes/anduril-scopes.yml
   - type: Website
     url: https://www.anduril.com/
   - type: DeveloperPortal
@@ -145,6 +147,8 @@ common:
     url: https://www.linkedin.com/company/anduril-industries/
   - type: News
     url: https://www.anduril.com/article/
+  - url: https://www.anduril.com/feed.xml
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
