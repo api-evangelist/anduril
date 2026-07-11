@@ -1,0 +1,26 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/anduril-openapi.yml
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Bearer token issued via /oauth/token or partner-issued bearer.
+  sources:
+  - openapi/anduril-openapi.yml
+- name: oauth2ClientCredentials
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.developer.anduril.com/oauth/token
+    scopes: 0
+  description: OAuth 2.0 client credentials flow for service-to-service access.
+  sources:
+  - openapi/anduril-openapi.yml

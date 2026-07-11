@@ -125,6 +125,12 @@ apis:
       - type: PartnerGated
         description: Production Lattice environments are partner-gated and subject to U.S. export controls (ITAR/EAR).
 common:
+  - type: VulnerabilityDisclosure
+    url: security/anduril-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/anduril-domain-security.yml
+  - type: Authentication
+    url: authentication/anduril-authentication.yml
   - type: OAuthScopes
     url: scopes/anduril-scopes.yml
   - type: Website
