@@ -1,0 +1,78 @@
+openapi: 3.1.0
+info:
+  title: Anduril Lattice REST Entities OAuth API
+  version: v1
+  description: 'REST/JSON surface of the Anduril Lattice SDK. Lattice exposes a common operating-picture data fabric for defense partners. The API is organized around three resource families: Entities (anything of operational significance: assets, tracks, geos, sensors), Tasks (sequential commands issued to connected agents with lifecycle and acknowledgements), and Objects (distributed binary payloads such as imagery and telemetry, up to 1 GiB). Authentication uses OAuth 2.0 client credentials to mint short-lived bearer tokens, or direct partner-issued bearer tokens. Production environments are partner-gated and subject to U.S. export controls (ITAR/EAR). Endpoints were reconstructed from the public Lattice SDK reference; gRPC/Protobuf transports are also available but are not described here.'
+  contact:
+    name: Anduril Developer Portal
+    url: https://developer.anduril.com/
+servers:
+- url: https://api.{environment}.anduril.com
+  description: Partner-specific Lattice environment
+  variables:
+    environment:
+      default: developer
+      description: Lattice environment subdomain provisioned for the partner
+security:
+- bearerAuth: []
+- oauth2ClientCredentials: []
+tags:
+- name: OAuth
+  description: Token issuance for client-credentials authentication.
+paths:
+  /oauth/token:
+    post:
+      tags:
+      - OAuth
+      summary: Issue an access token (client credentials grant)
+      description: Exchange client_id and client_secret for a short-lived bearer access token.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - grant_type
+              - client_id
+              - client_secret
+              properties:
+                grant_type:
+                  type: string
+                  enum:
+                  - client_credentials
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scope:
+                  type: string
+      responses:
+        '200':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: integer
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token issued via /oauth/token or partner-issued bearer.
+    oauth2ClientCredentials:
+      type: oauth2
+      description: OAuth 2.0 client credentials flow for service-to-service access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.developer.anduril.com/oauth/token
+          scopes: {}

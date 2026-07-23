@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: Anduril Lattice REST Entities Objects API
+  version: v1
+  description: 'REST/JSON surface of the Anduril Lattice SDK. Lattice exposes a common operating-picture data fabric for defense partners. The API is organized around three resource families: Entities (anything of operational significance: assets, tracks, geos, sensors), Tasks (sequential commands issued to connected agents with lifecycle and acknowledgements), and Objects (distributed binary payloads such as imagery and telemetry, up to 1 GiB). Authentication uses OAuth 2.0 client credentials to mint short-lived bearer tokens, or direct partner-issued bearer tokens. Production environments are partner-gated and subject to U.S. export controls (ITAR/EAR). Endpoints were reconstructed from the public Lattice SDK reference; gRPC/Protobuf transports are also available but are not described here.'
+  contact:
+    name: Anduril Developer Portal
+    url: https://developer.anduril.com/
+servers:
+- url: https://api.{environment}.anduril.com
+  description: Partner-specific Lattice environment
+  variables:
+    environment:
+      default: developer
+      description: Lattice environment subdomain provisioned for the partner
+security:
+- bearerAuth: []
+- oauth2ClientCredentials: []
+tags:
+- name: Objects
+  description: Upload, fetch, list, and delete distributed binary objects.
+paths:
+  /objects:
+    get:
+      tags:
+      - Objects
+      summary: List objects
+      description: List objects with optional prefix filtering; returns local objects by default.
+      parameters:
+      - name: prefix
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: page_token
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Page of object metadata records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  objects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ObjectMetadata'
+                  next_page_token:
+                    type: string
+  /objects:listDeleted:
+    get:
+      tags:
+      - Objects
+      summary: List deleted objects
+      description: Retrieve paginated records of force-distributed deleted objects with path and checksum pairs.
+      parameters:
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: page_token
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Page of deleted object records
+  /objects/{object_path}:
+    get:
+      tags:
+      - Objects
+      summary: Fetch object content
+      description: Fetch object content; supports compression and priority preferences.
+      parameters:
+      - $ref: '#/components/parameters/ObjectPath'
+      responses:
+        '200':
+          description: Object bytes
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+    put:
+      tags:
+      - Objects
+      summary: Upload an object
+      description: Upload an object up to 1 GiB in size.
+      parameters:
+      - $ref: '#/components/parameters/ObjectPath'
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Object stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectMetadata'
+    delete:
+      tags:
+      - Objects
+      summary: Delete an object
+      parameters:
+      - $ref: '#/components/parameters/ObjectPath'
+      responses:
+        '204':
+          description: Object deleted
+  /objects/{object_path}:metadata:
+    get:
+      tags:
+      - Objects
+      summary: Get object metadata
+      description: Retrieve object metadata including size, expiry time, and last update timestamp.
+      parameters:
+      - $ref: '#/components/parameters/ObjectPath'
+      responses:
+        '200':
+          description: Object metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectMetadata'
+components:
+  schemas:
+    ObjectMetadata:
+      type: object
+      description: Metadata for a Lattice binary object.
+      properties:
+        object_path:
+          type: string
+        size_bytes:
+          type: integer
+          format: int64
+        expiry_time:
+          type: string
+          format: date-time
+        last_update_time:
+          type: string
+          format: date-time
+        checksum:
+          type: string
+  parameters:
+    ObjectPath:
+      name: object_path
+      in: path
+      required: true
+      description: Path identifying the object within the Lattice object store.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token issued via /oauth/token or partner-issued bearer.
+    oauth2ClientCredentials:
+      type: oauth2
+      description: OAuth 2.0 client credentials flow for service-to-service access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.developer.anduril.com/oauth/token
+          scopes: {}

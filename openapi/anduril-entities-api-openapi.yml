@@ -1,0 +1,177 @@
+openapi: 3.1.0
+info:
+  title: Anduril Lattice REST Entities API
+  version: v1
+  description: 'REST/JSON surface of the Anduril Lattice SDK. Lattice exposes a common operating-picture data fabric for defense partners. The API is organized around three resource families: Entities (anything of operational significance: assets, tracks, geos, sensors), Tasks (sequential commands issued to connected agents with lifecycle and acknowledgements), and Objects (distributed binary payloads such as imagery and telemetry, up to 1 GiB). Authentication uses OAuth 2.0 client credentials to mint short-lived bearer tokens, or direct partner-issued bearer tokens. Production environments are partner-gated and subject to U.S. export controls (ITAR/EAR). Endpoints were reconstructed from the public Lattice SDK reference; gRPC/Protobuf transports are also available but are not described here.'
+  contact:
+    name: Anduril Developer Portal
+    url: https://developer.anduril.com/
+servers:
+- url: https://api.{environment}.anduril.com
+  description: Partner-specific Lattice environment
+  variables:
+    environment:
+      default: developer
+      description: Lattice environment subdomain provisioned for the partner
+security:
+- bearerAuth: []
+- oauth2ClientCredentials: []
+tags:
+- name: Entities
+  description: Publish, query, override, and stream entities in the Lattice data fabric.
+paths:
+  /entities:
+    post:
+      tags:
+      - Entities
+      summary: Publish an entity
+      description: Publish (create or update) an entity for ingest into the Lattice data fabric. Upsert is keyed by entity ID and provenance timestamp.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entity'
+      responses:
+        '200':
+          description: Entity accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+  /entities/{entity_id}:
+    get:
+      tags:
+      - Entities
+      summary: Get an entity by ID
+      parameters:
+      - $ref: '#/components/parameters/EntityId'
+      responses:
+        '200':
+          description: Entity found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+        '404':
+          description: Entity not found
+  /entities/{entity_id}/override:
+    patch:
+      tags:
+      - Entities
+      summary: Override fields on an entity
+      description: Override specific overridable fields on an entity using a field path.
+      parameters:
+      - $ref: '#/components/parameters/EntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_path:
+                  type: string
+                  description: Dotted path to the field being overridden.
+                value:
+                  description: Override value to apply at field_path.
+      responses:
+        '200':
+          description: Override applied
+  /entities/{entity_id}/override/{field_path}:
+    delete:
+      tags:
+      - Entities
+      summary: Clear an override
+      description: Clear an override value previously set on the specified field path.
+      parameters:
+      - $ref: '#/components/parameters/EntityId'
+      - name: field_path
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Override cleared
+  /entities/events:longPoll:
+    post:
+      tags:
+      - Entities
+      summary: Long-poll entity events
+      description: Long-poll connection returning pre-existing and new entity events with session tokens for resumption.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session_token:
+                  type: string
+                filter:
+                  type: object
+      responses:
+        '200':
+          description: Batch of entity events
+  /entities:stream:
+    get:
+      tags:
+      - Entities
+      summary: Stream entities (SSE)
+      description: Server-Sent Events stream of real-time entity data with filtering options.
+      responses:
+        '200':
+          description: SSE stream of entity events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+components:
+  schemas:
+    Entity:
+      type: object
+      description: An operationally significant entity (asset, track, geo, sensor) in the Lattice data fabric.
+      properties:
+        entity_id:
+          type: string
+        provenance:
+          type: object
+          properties:
+            source_update_time:
+              type: string
+              format: date-time
+            integration_name:
+              type: string
+            data_type:
+              type: string
+        aliases:
+          type: object
+        location:
+          type: object
+        is_live:
+          type: boolean
+        expiry_time:
+          type: string
+          format: date-time
+  parameters:
+    EntityId:
+      name: entity_id
+      in: path
+      required: true
+      description: Unique identifier of the entity.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token issued via /oauth/token or partner-issued bearer.
+    oauth2ClientCredentials:
+      type: oauth2
+      description: OAuth 2.0 client credentials flow for service-to-service access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.developer.anduril.com/oauth/token
+          scopes: {}
