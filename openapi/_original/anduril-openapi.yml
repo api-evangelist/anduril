@@ -1,0 +1,589 @@
+openapi: 3.1.0
+info:
+  title: Anduril Lattice REST API
+  version: v1
+  description: >-
+    REST/JSON surface of the Anduril Lattice SDK. Lattice exposes a common
+    operating-picture data fabric for defense partners. The API is organized
+    around three resource families: Entities (anything of operational
+    significance: assets, tracks, geos, sensors), Tasks (sequential commands
+    issued to connected agents with lifecycle and acknowledgements), and
+    Objects (distributed binary payloads such as imagery and telemetry, up to
+    1 GiB). Authentication uses OAuth 2.0 client credentials to mint short-lived
+    bearer tokens, or direct partner-issued bearer tokens. Production
+    environments are partner-gated and subject to U.S. export controls
+    (ITAR/EAR). Endpoints were reconstructed from the public Lattice SDK
+    reference; gRPC/Protobuf transports are also available but are not
+    described here.
+  contact:
+    name: Anduril Developer Portal
+    url: https://developer.anduril.com/
+servers:
+  - url: https://api.{environment}.anduril.com
+    description: Partner-specific Lattice environment
+    variables:
+      environment:
+        default: developer
+        description: Lattice environment subdomain provisioned for the partner
+tags:
+  - name: Entities
+    description: Publish, query, override, and stream entities in the Lattice data fabric.
+  - name: Tasks
+    description: Create, update, query, cancel, and stream tasks; agent-side listen/stream endpoints.
+  - name: Objects
+    description: Upload, fetch, list, and delete distributed binary objects.
+  - name: OAuth
+    description: Token issuance for client-credentials authentication.
+paths:
+  /oauth/token:
+    post:
+      tags:
+        - OAuth
+      summary: Issue an access token (client credentials grant)
+      description: Exchange client_id and client_secret for a short-lived bearer access token.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - client_id
+                - client_secret
+              properties:
+                grant_type:
+                  type: string
+                  enum: [client_credentials]
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+                scope:
+                  type: string
+      responses:
+        '200':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: integer
+  /entities:
+    post:
+      tags:
+        - Entities
+      summary: Publish an entity
+      description: Publish (create or update) an entity for ingest into the Lattice data fabric. Upsert is keyed by entity ID and provenance timestamp.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entity'
+      responses:
+        '200':
+          description: Entity accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+  /entities/{entity_id}:
+    get:
+      tags:
+        - Entities
+      summary: Get an entity by ID
+      parameters:
+        - $ref: '#/components/parameters/EntityId'
+      responses:
+        '200':
+          description: Entity found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+        '404':
+          description: Entity not found
+  /entities/{entity_id}/override:
+    patch:
+      tags:
+        - Entities
+      summary: Override fields on an entity
+      description: Override specific overridable fields on an entity using a field path.
+      parameters:
+        - $ref: '#/components/parameters/EntityId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                field_path:
+                  type: string
+                  description: Dotted path to the field being overridden.
+                value:
+                  description: Override value to apply at field_path.
+      responses:
+        '200':
+          description: Override applied
+  /entities/{entity_id}/override/{field_path}:
+    delete:
+      tags:
+        - Entities
+      summary: Clear an override
+      description: Clear an override value previously set on the specified field path.
+      parameters:
+        - $ref: '#/components/parameters/EntityId'
+        - name: field_path
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Override cleared
+  /entities/events:longPoll:
+    post:
+      tags:
+        - Entities
+      summary: Long-poll entity events
+      description: Long-poll connection returning pre-existing and new entity events with session tokens for resumption.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session_token:
+                  type: string
+                filter:
+                  type: object
+      responses:
+        '200':
+          description: Batch of entity events
+  /entities:stream:
+    get:
+      tags:
+        - Entities
+      summary: Stream entities (SSE)
+      description: Server-Sent Events stream of real-time entity data with filtering options.
+      responses:
+        '200':
+          description: SSE stream of entity events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+  /tasks:
+    post:
+      tags:
+        - Tasks
+      summary: Create a task
+      description: Create a new task with an auto-generated or specified ID; initializes with STATUS_CREATED.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+  /tasks/{task_id}:
+    get:
+      tags:
+        - Tasks
+      summary: Get a task by ID
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Task details including status, specification, and relations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+  /tasks/{task_id}/status:
+    patch:
+      tags:
+        - Tasks
+      summary: Update task status
+      description: Update task status as it progresses; increments status_version for optimistic consistency.
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                status_version:
+                  type: integer
+      responses:
+        '200':
+          description: Status updated
+  /tasks/{task_id}:cancel:
+    post:
+      tags:
+        - Tasks
+      summary: Cancel a task
+      description: Immediate cancellation if the task has not been sent to an agent; otherwise routes to the agent for decision.
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Cancellation accepted
+  /tasks:query:
+    post:
+      tags:
+        - Tasks
+      summary: Query tasks
+      description: Search tasks by parent ID, status, time range, assignee, and type. Paginated.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parent_task_id:
+                  type: string
+                statuses:
+                  type: array
+                  items:
+                    type: string
+                assignee:
+                  type: string
+                task_type:
+                  type: string
+                start_time:
+                  type: string
+                  format: date-time
+                end_time:
+                  type: string
+                  format: date-time
+                page_size:
+                  type: integer
+                page_token:
+                  type: string
+      responses:
+        '200':
+          description: Page of tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Task'
+                  next_page_token:
+                    type: string
+  /tasks:stream:
+    get:
+      tags:
+        - Tasks
+      summary: Stream tasks (SSE)
+      description: SSE stream delivering existing non-terminal tasks and real-time updates with heartbeats.
+      responses:
+        '200':
+          description: SSE stream of task updates
+          content:
+            text/event-stream:
+              schema:
+                type: string
+  /tasks:listenAsAgent:
+    post:
+      tags:
+        - Tasks
+      summary: Long-poll as an agent
+      description: Long-poll connection for agents to receive ExecuteRequest, CancelRequest, and CompleteRequest messages.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agent_id:
+                  type: string
+                session_token:
+                  type: string
+      responses:
+        '200':
+          description: Agent task requests
+  /tasks:streamAsAgent:
+    get:
+      tags:
+        - Tasks
+      summary: Stream as an agent (SSE)
+      description: SSE stream for agents to receive task requests (Execute, Cancel, Complete) with heartbeats.
+      responses:
+        '200':
+          description: SSE stream of agent task requests
+          content:
+            text/event-stream:
+              schema:
+                type: string
+  /tasks/{task_id}/manualControlFrames:stream:
+    get:
+      tags:
+        - Tasks
+      summary: Stream manual control frames (SSE)
+      description: SSE stream delivering manual control frames to the executing agent; terminates at task completion.
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: SSE stream of manual control frames
+          content:
+            text/event-stream:
+              schema:
+                type: string
+  /objects:
+    get:
+      tags:
+        - Objects
+      summary: List objects
+      description: List objects with optional prefix filtering; returns local objects by default.
+      parameters:
+        - name: prefix
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: page_token
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Page of object metadata records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  objects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ObjectMetadata'
+                  next_page_token:
+                    type: string
+  /objects:listDeleted:
+    get:
+      tags:
+        - Objects
+      summary: List deleted objects
+      description: Retrieve paginated records of force-distributed deleted objects with path and checksum pairs.
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: page_token
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Page of deleted object records
+  /objects/{object_path}:
+    get:
+      tags:
+        - Objects
+      summary: Fetch object content
+      description: Fetch object content; supports compression and priority preferences.
+      parameters:
+        - $ref: '#/components/parameters/ObjectPath'
+      responses:
+        '200':
+          description: Object bytes
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+    put:
+      tags:
+        - Objects
+      summary: Upload an object
+      description: Upload an object up to 1 GiB in size.
+      parameters:
+        - $ref: '#/components/parameters/ObjectPath'
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Object stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectMetadata'
+    delete:
+      tags:
+        - Objects
+      summary: Delete an object
+      parameters:
+        - $ref: '#/components/parameters/ObjectPath'
+      responses:
+        '204':
+          description: Object deleted
+  /objects/{object_path}:metadata:
+    get:
+      tags:
+        - Objects
+      summary: Get object metadata
+      description: Retrieve object metadata including size, expiry time, and last update timestamp.
+      parameters:
+        - $ref: '#/components/parameters/ObjectPath'
+      responses:
+        '200':
+          description: Object metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectMetadata'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token issued via /oauth/token or partner-issued bearer.
+    oauth2ClientCredentials:
+      type: oauth2
+      description: OAuth 2.0 client credentials flow for service-to-service access.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.developer.anduril.com/oauth/token
+          scopes: {}
+  parameters:
+    EntityId:
+      name: entity_id
+      in: path
+      required: true
+      description: Unique identifier of the entity.
+      schema:
+        type: string
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      description: Unique identifier of the task.
+      schema:
+        type: string
+    ObjectPath:
+      name: object_path
+      in: path
+      required: true
+      description: Path identifying the object within the Lattice object store.
+      schema:
+        type: string
+  schemas:
+    Entity:
+      type: object
+      description: An operationally significant entity (asset, track, geo, sensor) in the Lattice data fabric.
+      properties:
+        entity_id:
+          type: string
+        provenance:
+          type: object
+          properties:
+            source_update_time:
+              type: string
+              format: date-time
+            integration_name:
+              type: string
+            data_type:
+              type: string
+        aliases:
+          type: object
+        location:
+          type: object
+        is_live:
+          type: boolean
+        expiry_time:
+          type: string
+          format: date-time
+    Task:
+      type: object
+      description: A sequential command issued to a Lattice-connected agent.
+      properties:
+        task_id:
+          type: string
+        display_name:
+          type: string
+        description:
+          type: string
+        specification:
+          type: object
+        status:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - STATUS_CREATED
+                - STATUS_SENT
+                - STATUS_ACKED
+                - STATUS_EXECUTING
+                - STATUS_DONE_OK
+                - STATUS_DONE_NOT_OK
+                - STATUS_CANCELED
+            status_version:
+              type: integer
+        relations:
+          type: object
+        assignee:
+          type: object
+    ObjectMetadata:
+      type: object
+      description: Metadata for a Lattice binary object.
+      properties:
+        object_path:
+          type: string
+        size_bytes:
+          type: integer
+          format: int64
+        expiry_time:
+          type: string
+          format: date-time
+        last_update_time:
+          type: string
+          format: date-time
+        checksum:
+          type: string
+security:
+  - bearerAuth: []
+  - oauth2ClientCredentials: []
