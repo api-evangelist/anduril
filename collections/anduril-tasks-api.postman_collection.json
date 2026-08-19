@@ -1,0 +1,997 @@
+{
+  "item": [
+    {
+      "id": "3614cd66-f832-4e20-acdf-349c98b47e37",
+      "name": "Tasks",
+      "description": {
+        "content": "Create, update, query, cancel, and stream tasks; agent-side listen/stream endpoints.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b1f8c8a9-3f13-4af3-aea7-040486b72fbb",
+          "name": "Create a task",
+          "request": {
+            "name": "Create a task",
+            "description": {
+              "content": "Create a new task with an auto-generated or specified ID; initializes with STATUS_CREATED.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"task_id\": \"<string>\",\n  \"display_name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"specification\": \"<object>\",\n  \"status\": {\n    \"status\": \"<string>\",\n    \"status_version\": \"<integer>\"\n  },\n  \"relations\": \"<object>\",\n  \"assignee\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "204cb4af-7bcd-4600-bb3f-394f77a4031c",
+              "name": "Task created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"task_id\": \"<string>\",\n  \"display_name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"specification\": \"<object>\",\n  \"status\": {\n    \"status\": \"<string>\",\n    \"status_version\": \"<integer>\"\n  },\n  \"relations\": \"<object>\",\n  \"assignee\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"string\",\n  \"display_name\": \"string\",\n  \"description\": \"string\",\n  \"specification\": {},\n  \"status\": {\n    \"status\": \"STATUS_DONE_NOT_OK\",\n    \"status_version\": 5330\n  },\n  \"relations\": {},\n  \"assignee\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0acde63c-c171-4f80-b71b-d984fcbf8f66",
+          "name": "Get a task by ID",
+          "request": {
+            "name": "Get a task by ID",
+            "description": {},
+            "url": {
+              "path": [
+                "tasks",
+                ":task_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) Unique identifier of the task."
+                },
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0460cc26-cf73-4562-8079-85e176475c4e",
+              "name": "Task details including status, specification, and relations",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":task_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Unique identifier of the task."
+                    },
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"task_id\": \"string\",\n  \"display_name\": \"string\",\n  \"description\": \"string\",\n  \"specification\": {},\n  \"status\": {\n    \"status\": \"STATUS_DONE_NOT_OK\",\n    \"status_version\": 5330\n  },\n  \"relations\": {},\n  \"assignee\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14a20475-bf15-47e1-8255-8a114888a3ba",
+          "name": "Update task status",
+          "request": {
+            "name": "Update task status",
+            "description": {
+              "content": "Update task status as it progresses; increments status_version for optimistic consistency.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks",
+                ":task_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) Unique identifier of the task."
+                },
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\",\n  \"status_version\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2cc6b6ec-12c9-4edc-894d-b8a339b62a18",
+              "name": "Status updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":task_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Unique identifier of the task."
+                    },
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"<string>\",\n  \"status_version\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "74b4e743-0528-469e-b341-ca968b7c5ec1",
+          "name": "Cancel a task",
+          "request": {
+            "name": "Cancel a task",
+            "description": {
+              "content": "Immediate cancellation if the task has not been sent to an agent; otherwise routes to the agent for decision.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks",
+                "{{task_id}}:cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "763b9de4-1649-4538-901c-1cb6b4e4bab8",
+              "name": "Cancellation accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    "{{task_id}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d6f4e798-c4f2-47c9-94aa-be4fb522ce56",
+          "name": "Query tasks",
+          "request": {
+            "name": "Query tasks",
+            "description": {
+              "content": "Search tasks by parent ID, status, time range, assignee, and type. Paginated.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks:query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parent_task_id\": \"<string>\",\n  \"statuses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"assignee\": \"<string>\",\n  \"task_type\": \"<string>\",\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page_size\": \"<integer>\",\n  \"page_token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a475c309-e265-4f87-b2d4-1e15781ac67b",
+              "name": "Page of tasks",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks:query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parent_task_id\": \"<string>\",\n  \"statuses\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"assignee\": \"<string>\",\n  \"task_type\": \"<string>\",\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page_size\": \"<integer>\",\n  \"page_token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tasks\": [\n    {\n      \"task_id\": \"string\",\n      \"display_name\": \"string\",\n      \"description\": \"string\",\n      \"specification\": {},\n      \"status\": {\n        \"status\": \"STATUS_EXECUTING\",\n        \"status_version\": 5928\n      },\n      \"relations\": {},\n      \"assignee\": {}\n    },\n    {\n      \"task_id\": \"string\",\n      \"display_name\": \"string\",\n      \"description\": \"string\",\n      \"specification\": {},\n      \"status\": {\n        \"status\": \"STATUS_DONE_NOT_OK\",\n        \"status_version\": 2807\n      },\n      \"relations\": {},\n      \"assignee\": {}\n    }\n  ],\n  \"next_page_token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c103db70-148c-4dcd-9dc2-ae4c4d2b3c40",
+          "name": "Stream tasks (SSE)",
+          "request": {
+            "name": "Stream tasks (SSE)",
+            "description": {
+              "content": "SSE stream delivering existing non-terminal tasks and real-time updates with heartbeats.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks:stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8d4ee418-0c7d-4c74-bdc2-77b25cbe9276",
+              "name": "SSE stream of task updates",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks:stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "697482d5-7d5d-4c11-8090-980dcb4b7a7f",
+          "name": "Long-poll as an agent",
+          "request": {
+            "name": "Long-poll as an agent",
+            "description": {
+              "content": "Long-poll connection for agents to receive ExecuteRequest, CancelRequest, and CompleteRequest messages.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks:listenAsAgent"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"agent_id\": \"<string>\",\n  \"session_token\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5e8f1021-9a1d-4fa0-9f06-9d38f4c9cd63",
+              "name": "Agent task requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks:listenAsAgent"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"agent_id\": \"<string>\",\n  \"session_token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d7fe7a72-d2f5-4678-8dcb-7444795b3070",
+          "name": "Stream as an agent (SSE)",
+          "request": {
+            "name": "Stream as an agent (SSE)",
+            "description": {
+              "content": "SSE stream for agents to receive task requests (Execute, Cancel, Complete) with heartbeats.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks:streamAsAgent"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "858f74e6-bb2a-4380-ba7d-13193cd61022",
+              "name": "SSE stream of agent task requests",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks:streamAsAgent"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7717f740-9506-4d2a-ac02-aad316788760",
+          "name": "Stream manual control frames (SSE)",
+          "request": {
+            "name": "Stream manual control frames (SSE)",
+            "description": {
+              "content": "SSE stream delivering manual control frames to the executing agent; terminates at task completion.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tasks",
+                ":task_id",
+                "manualControlFrames:stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "task_id",
+                  "description": "(Required) Unique identifier of the task."
+                },
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "01856075-6906-4ebc-8db1-8e04ff91ba28",
+              "name": "SSE stream of manual control frames",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tasks",
+                    ":task_id",
+                    "manualControlFrames:stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "task_id",
+                      "description": "(Required) Unique identifier of the task."
+                    },
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Lattice environment subdomain provisioned for the partner",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "developer",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://api.{{environment}}.anduril.com",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) Unique identifier of the task.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "task_id"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a54dcdd4-c621-4b7f-a5cd-2c25b2c64a76",
+    "name": "Anduril Lattice REST Entities Tasks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST/JSON surface of the Anduril Lattice SDK. Lattice exposes a common operating-picture data fabric for defense partners. The API is organized around three resource families: Entities (anything of operational significance: assets, tracks, geos, sensors), Tasks (sequential commands issued to connected agents with lifecycle and acknowledgements), and Objects (distributed binary payloads such as imagery and telemetry, up to 1 GiB). Authentication uses OAuth 2.0 client credentials to mint short-lived bearer tokens, or direct partner-issued bearer tokens. Production environments are partner-gated and subject to U.S. export controls (ITAR/EAR). Endpoints were reconstructed from the public Lattice SDK reference; gRPC/Protobuf transports are also available but are not described here.\n\nContact Support:\n Name: Anduril Developer Portal",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anduril Lattice REST Entities Tasks API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new task with an auto-generated or specified ID; initializes with STATUS_CREATED."
+        },
+        {
+          "info": {
+            "name": "Get a task by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ]
+          },
+          "docs": "Get a task by ID"
+        },
+        {
+          "info": {
+            "name": "Update task status",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id/status",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update task status as it progresses; increments status_version for optimistic consistency."
+        },
+        {
+          "info": {
+            "name": "Cancel a task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id:cancel",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ]
+          },
+          "docs": "Immediate cancellation if the task has not been sent to an agent; otherwise routes to the agent for decision."
+        },
+        {
+          "info": {
+            "name": "Query tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks:query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search tasks by parent ID, status, time range, assignee, and type. Paginated."
+        },
+        {
+          "info": {
+            "name": "Stream tasks (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks:stream"
+          },
+          "docs": "SSE stream delivering existing non-terminal tasks and real-time updates with heartbeats."
+        },
+        {
+          "info": {
+            "name": "Long-poll as an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/tasks:listenAsAgent",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Long-poll connection for agents to receive ExecuteRequest, CancelRequest, and CompleteRequest messages."
+        },
+        {
+          "info": {
+            "name": "Stream as an agent (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks:streamAsAgent"
+          },
+          "docs": "SSE stream for agents to receive task requests (Execute, Cancel, Complete) with heartbeats."
+        },
+        {
+          "info": {
+            "name": "Stream manual control frames (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/tasks/:task_id/manualControlFrames:stream",
+            "params": [
+              {
+                "name": "task_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the task."
+              }
+            ]
+          },
+          "docs": "SSE stream delivering manual control frames to the executing agent; terminates at task completion."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anduril Lattice REST Entities Objects API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Objects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects",
+            "params": [
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List objects with optional prefix filtering; returns local objects by default."
+        },
+        {
+          "info": {
+            "name": "List deleted objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects:listDeleted",
+            "params": [
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve paginated records of force-distributed deleted objects with path and checksum pairs."
+        },
+        {
+          "info": {
+            "name": "Fetch object content",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Fetch object content; supports compression and priority preferences."
+        },
+        {
+          "info": {
+            "name": "Upload an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Upload an object up to 1 GiB in size."
+        },
+        {
+          "info": {
+            "name": "Delete an object",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Delete an object"
+        },
+        {
+          "info": {
+            "name": "Get object metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/objects/:object_path:metadata",
+            "params": [
+              {
+                "name": "object_path",
+                "value": "",
+                "type": "path",
+                "description": "Path identifying the object within the Lattice object store."
+              }
+            ]
+          },
+          "docs": "Retrieve object metadata including size, expiry time, and last update timestamp."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

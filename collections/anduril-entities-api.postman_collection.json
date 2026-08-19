@@ -1,0 +1,760 @@
+{
+  "item": [
+    {
+      "id": "9d30d1b4-1119-4020-8895-88da6b629e0b",
+      "name": "Entities",
+      "description": {
+        "content": "Publish, query, override, and stream entities in the Lattice data fabric.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5ce9157e-e917-4cfe-aa77-e50f7b6649c9",
+          "name": "Publish an entity",
+          "request": {
+            "name": "Publish an entity",
+            "description": {
+              "content": "Publish (create or update) an entity for ingest into the Lattice data fabric. Upsert is keyed by entity ID and provenance timestamp.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"entity_id\": \"<string>\",\n  \"provenance\": {\n    \"source_update_time\": \"<dateTime>\",\n    \"integration_name\": \"<string>\",\n    \"data_type\": \"<string>\"\n  },\n  \"aliases\": \"<object>\",\n  \"location\": \"<object>\",\n  \"is_live\": \"<boolean>\",\n  \"expiry_time\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "daa9271a-96fe-416f-b13e-3cfc53191072",
+              "name": "Entity accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"entity_id\": \"<string>\",\n  \"provenance\": {\n    \"source_update_time\": \"<dateTime>\",\n    \"integration_name\": \"<string>\",\n    \"data_type\": \"<string>\"\n  },\n  \"aliases\": \"<object>\",\n  \"location\": \"<object>\",\n  \"is_live\": \"<boolean>\",\n  \"expiry_time\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_id\": \"string\",\n  \"provenance\": {\n    \"source_update_time\": \"1948-07-22T15:32:58.434Z\",\n    \"integration_name\": \"string\",\n    \"data_type\": \"string\"\n  },\n  \"aliases\": {},\n  \"location\": {},\n  \"is_live\": true,\n  \"expiry_time\": \"2015-07-25T12:29:02.496Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "173e47c5-857a-4539-9496-97bfb3e1685e",
+          "name": "Get an entity by ID",
+          "request": {
+            "name": "Get an entity by ID",
+            "description": {},
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) Unique identifier of the entity."
+                },
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a2825a19-1514-49bb-a0e4-364df832ee28",
+              "name": "Entity found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) Unique identifier of the entity."
+                    },
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entity_id\": \"string\",\n  \"provenance\": {\n    \"source_update_time\": \"1948-07-22T15:32:58.434Z\",\n    \"integration_name\": \"string\",\n    \"data_type\": \"string\"\n  },\n  \"aliases\": {},\n  \"location\": {},\n  \"is_live\": true,\n  \"expiry_time\": \"2015-07-25T12:29:02.496Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e049822d-5f80-4955-8992-60d693e010c0",
+              "name": "Entity not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) Unique identifier of the entity."
+                    },
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f98e4271-78b5-4da8-b458-f78a684a0fd3",
+          "name": "Override fields on an entity",
+          "request": {
+            "name": "Override fields on an entity",
+            "description": {
+              "content": "Override specific overridable fields on an entity using a field path.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "override"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) Unique identifier of the entity."
+                },
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field_path\": \"<string>\",\n  \"value\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e9274ced-13e8-4992-8526-dfee0e25259f",
+              "name": "Override applied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "override"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) Unique identifier of the entity."
+                    },
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"field_path\": \"<string>\",\n  \"value\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50d63612-f062-443b-b271-f22786b213d1",
+          "name": "Clear an override",
+          "request": {
+            "name": "Clear an override",
+            "description": {
+              "content": "Clear an override value previously set on the specified field path.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                ":entity_id",
+                "override",
+                ":field_path"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entity_id",
+                  "description": "(Required) Unique identifier of the entity."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "field_path",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e5ad9093-fc79-4398-b344-ec9bcb1f0359",
+              "name": "Override cleared",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    ":entity_id",
+                    "override",
+                    ":field_path"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entity_id",
+                      "description": "(Required) Unique identifier of the entity."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "field_path",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3f044f64-f1a7-4125-9008-d19e013c0cf2",
+          "name": "Long-poll entity events",
+          "request": {
+            "name": "Long-poll entity events",
+            "description": {
+              "content": "Long-poll connection returning pre-existing and new entity events with session tokens for resumption.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities",
+                "events:longPoll"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"session_token\": \"<string>\",\n  \"filter\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6d72a3e1-1901-403b-8a31-4aa5b40cf753",
+              "name": "Batch of entity events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities",
+                    "events:longPoll"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"session_token\": \"<string>\",\n  \"filter\": \"<object>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "751f7b4d-3ddb-4ec5-8585-b25da9639ad9",
+          "name": "Stream entities (SSE)",
+          "request": {
+            "name": "Stream entities (SSE)",
+            "description": {
+              "content": "Server-Sent Events stream of real-time entity data with filtering options.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "entities:stream"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Lattice environment subdomain provisioned for the partner",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "006dc523-900a-4fac-bed5-e59ad2dcf4d2",
+              "name": "SSE stream of entity events",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "entities:stream"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Lattice environment subdomain provisioned for the partner",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/event-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Lattice environment subdomain provisioned for the partner",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "developer",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://api.{{environment}}.anduril.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "98a41966-369f-48ee-8adb-2f480033fac0",
+    "name": "Anduril Lattice REST Entities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST/JSON surface of the Anduril Lattice SDK. Lattice exposes a common operating-picture data fabric for defense partners. The API is organized around three resource families: Entities (anything of operational significance: assets, tracks, geos, sensors), Tasks (sequential commands issued to connected agents with lifecycle and acknowledgements), and Objects (distributed binary payloads such as imagery and telemetry, up to 1 GiB). Authentication uses OAuth 2.0 client credentials to mint short-lived bearer tokens, or direct partner-issued bearer tokens. Production environments are partner-gated and subject to U.S. export controls (ITAR/EAR). Endpoints were reconstructed from the public Lattice SDK reference; gRPC/Protobuf transports are also available but are not described here.\n\nContact Support:\n Name: Anduril Developer Portal",
+      "type": "text/plain"
+    }
+  }
+}

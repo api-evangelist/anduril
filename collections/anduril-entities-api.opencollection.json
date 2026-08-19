@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Anduril Lattice REST Entities API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Publish an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/entities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Publish (create or update) an entity for ingest into the Lattice data fabric. Upsert is keyed by entity ID and provenance timestamp."
+        },
+        {
+          "info": {
+            "name": "Get an entity by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/entities/:entity_id",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the entity."
+              }
+            ]
+          },
+          "docs": "Get an entity by ID"
+        },
+        {
+          "info": {
+            "name": "Override fields on an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.{environment}.anduril.com/entities/:entity_id/override",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the entity."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Override specific overridable fields on an entity using a field path."
+        },
+        {
+          "info": {
+            "name": "Clear an override",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.{environment}.anduril.com/entities/:entity_id/override/:field_path",
+            "params": [
+              {
+                "name": "entity_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the entity."
+              },
+              {
+                "name": "field_path",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Clear an override value previously set on the specified field path."
+        },
+        {
+          "info": {
+            "name": "Long-poll entity events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{environment}.anduril.com/entities/events:longPoll",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Long-poll connection returning pre-existing and new entity events with session tokens for resumption."
+        },
+        {
+          "info": {
+            "name": "Stream entities (SSE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{environment}.anduril.com/entities:stream"
+          },
+          "docs": "Server-Sent Events stream of real-time entity data with filtering options."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
