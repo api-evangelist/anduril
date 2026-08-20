@@ -67,6 +67,15 @@ apis:
   tags:
   - Lattice
   - Entities
+  - Task
+  - Objects
+  - gRPC
+  - REST
+  - Defense SDK
+  - Mission Autonomy
+  tags_raw:
+  - Lattice
+  - Entities
   - Tasks
   - Objects
   - gRPC
@@ -178,6 +187,8 @@ apis:
   humanURL: https://developer.anduril.com/
   baseURL: https://developer.anduril.com
   tags:
+  - Authentication
+  tags_raw:
   - OAuth
   properties:
   - type: OpenAPI
@@ -198,6 +209,8 @@ apis:
   humanURL: https://developer.anduril.com/
   baseURL: https://developer.anduril.com
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
