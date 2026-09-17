@@ -192,18 +192,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/anduril-entities-api-openapi.yml
-- aid: anduril:anduril-oauth-api
-  name: Anduril Industries OAuth API
-  description: Token issuance for client-credentials authentication.
-  humanURL: https://developer.anduril.com/
-  baseURL: https://developer.anduril.com
-  tags:
-  - Authentication
-  tags_raw:
-  - OAuth
-  properties:
-  - type: OpenAPI
-    url: openapi/anduril-oauth-api-openapi.yml
 - aid: anduril:anduril-objects-api
   name: Anduril Industries Objects API
   description: Upload, fetch, list, and delete distributed binary objects.
@@ -226,6 +214,16 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/anduril-tasks-api-openapi.yml
+- aid: anduril:anduril-oauth-api
+  name: Anduril Industries O Auth API
+  description: Token issuance for client-credentials authentication.
+  humanURL: https://developer.anduril.com/
+  baseURL: https://developer.anduril.com
+  tags:
+  - OAuth
+  properties:
+  - type: OpenAPI
+    url: openapi/anduril-oauth-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/anduril-agentic-access.yml
