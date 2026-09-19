@@ -220,6 +220,8 @@ apis:
   humanURL: https://developer.anduril.com/
   baseURL: https://developer.anduril.com
   tags:
+  - Authentication
+  tags_raw:
   - OAuth
   properties:
   - type: OpenAPI
