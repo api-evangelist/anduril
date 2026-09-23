@@ -1,8 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Anduril Lattice REST Entities API
   version: v1
-  description: 'REST/JSON surface of the Anduril Lattice SDK. Lattice exposes a common operating-picture data fabric for defense partners. The API is organized around three resource families: Entities (anything of operational significance: assets, tracks, geos, sensors), Tasks (sequential commands issued to connected agents with lifecycle and acknowledgements), and Objects (distributed binary payloads such as imagery and telemetry, up to 1 GiB). Authentication uses OAuth 2.0 client credentials to mint short-lived bearer tokens, or direct partner-issued bearer tokens. Production environments are partner-gated and subject to U.S. export controls (ITAR/EAR). Endpoints were reconstructed from the public Lattice SDK reference; gRPC/Protobuf transports are also available but are not described here.'
+  description: REST/JSON surface of the Anduril Lattice SDK.
   contact:
     name: Anduril Developer Portal
     url: https://developer.anduril.com/
@@ -39,6 +39,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entity'
+      operationId: postEntities
+      x-operation-id-source: derived
   /entities/{entity_id}:
     get:
       tags:
@@ -55,6 +57,8 @@ paths:
                 $ref: '#/components/schemas/Entity'
         '404':
           description: Entity not found
+      operationId: getEntitiesByEntityId
+      x-operation-id-source: derived
   /entities/{entity_id}/override:
     patch:
       tags:
@@ -78,6 +82,8 @@ paths:
       responses:
         '200':
           description: Override applied
+      operationId: patchEntitiesByEntityIdOverride
+      x-operation-id-source: derived
   /entities/{entity_id}/override/{field_path}:
     delete:
       tags:
@@ -94,6 +100,8 @@ paths:
       responses:
         '204':
           description: Override cleared
+      operationId: deleteEntitiesByEntityIdOverrideByFieldPath
+      x-operation-id-source: derived
   /entities/events:longPoll:
     post:
       tags:
@@ -114,6 +122,8 @@ paths:
       responses:
         '200':
           description: Batch of entity events
+      operationId: postEntitiesEvents:longPoll
+      x-operation-id-source: derived
   /entities:stream:
     get:
       tags:
@@ -127,6 +137,8 @@ paths:
             text/event-stream:
               schema:
                 type: string
+      operationId: getEntities:stream
+      x-operation-id-source: derived
 components:
   schemas:
     Entity:
