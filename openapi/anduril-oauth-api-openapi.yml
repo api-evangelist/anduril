@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Anduril Lattice REST O Auth API
+  title: Anduril Lattice REST OAuth API
   version: v1
   description: REST/JSON surface of the Anduril Lattice SDK.
   contact:
