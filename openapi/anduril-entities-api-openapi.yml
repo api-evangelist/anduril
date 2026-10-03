@@ -140,14 +140,6 @@ paths:
       operationId: getEntities:stream
       x-operation-id-source: derived
 components:
-  parameters:
-    EntityId:
-      name: entity_id
-      in: path
-      required: true
-      description: Unique identifier of the entity.
-      schema:
-        type: string
   schemas:
     Entity:
       type: object
@@ -174,6 +166,14 @@ components:
         expiry_time:
           type: string
           format: date-time
+  parameters:
+    EntityId:
+      name: entity_id
+      in: path
+      required: true
+      description: Unique identifier of the entity.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http
