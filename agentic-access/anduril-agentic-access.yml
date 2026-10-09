@@ -1,37 +1,24 @@
-generated: '2026-07-15'
+generated: '2026-09-23'
 method: generated
-source: openapi/anduril-openapi.yml
+source: openapi/anduril-entities-api-openapi.yml, openapi/anduril-oauth-api-openapi.yml, openapi/anduril-objects-api-openapi.yml,
+  openapi/anduril-tasks-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
   operations: 22
   by_action_class:
-    acting: 12
-    connected: 10
+    acting: 11
+    connected: 11
   by_consequence:
-    write: 10
-    read: 10
+    write: 9
+    read: 11
     safety-critical: 2
   human_in_the_loop_required: 2
 operations:
-- path: /oauth/token
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /entities
   method: post
+  operationId: postEntities
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -47,6 +34,7 @@ operations:
     audit: required
 - path: /entities/{entity_id}
   method: get
+  operationId: getEntitiesByEntityId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -56,6 +44,7 @@ operations:
     audit: none
 - path: /entities/{entity_id}/override
   method: patch
+  operationId: patchEntitiesByEntityIdOverride
   x-agentic-access:
     action-class: acting
     consequence: safety-critical
@@ -71,6 +60,7 @@ operations:
     audit: required
 - path: /entities/{entity_id}/override/{field_path}
   method: delete
+  operationId: deleteEntitiesByEntityIdOverrideByFieldPath
   x-agentic-access:
     action-class: acting
     consequence: safety-critical
@@ -86,6 +76,7 @@ operations:
     audit: required
 - path: /entities/events:longPoll
   method: post
+  operationId: postEntitiesEvents:longPoll
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -101,6 +92,7 @@ operations:
     audit: required
 - path: /entities:stream
   method: get
+  operationId: getEntities:stream
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -108,8 +100,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /tasks
+- path: /oauth/token
   method: post
+  operationId: postOauthToken
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -123,104 +116,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /tasks/{task_id}
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /tasks/{task_id}/status
-  method: patch
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /tasks/{task_id}:cancel
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /tasks:query
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /tasks:stream
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /tasks:listenAsAgent
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /tasks:streamAsAgent
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /tasks/{task_id}/manualControlFrames:stream
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /objects
   method: get
+  operationId: getObjects
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -230,6 +128,7 @@ operations:
     audit: none
 - path: /objects:listDeleted
   method: get
+  operationId: getObjects:listDeleted
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -239,6 +138,7 @@ operations:
     audit: none
 - path: /objects/{object_path}
   method: get
+  operationId: getObjectsByObjectPath
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -248,6 +148,7 @@ operations:
     audit: none
 - path: /objects/{object_path}
   method: put
+  operationId: putObjectsByObjectPath
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -263,6 +164,7 @@ operations:
     audit: required
 - path: /objects/{object_path}
   method: delete
+  operationId: deleteObjectsByObjectPath
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -278,6 +180,121 @@ operations:
     audit: required
 - path: /objects/{object_path}:metadata
   method: get
+  operationId: getObjects{objectPath}:metadata
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tasks
+  method: post
+  operationId: postTasks
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tasks/{task_id}
+  method: get
+  operationId: getTasksByTaskId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tasks/{task_id}/status
+  method: patch
+  operationId: patchTasksByTaskIdStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tasks/{task_id}:cancel
+  method: post
+  operationId: postTasks{taskId}:cancel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tasks:query
+  method: post
+  operationId: postTasks:query
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tasks:stream
+  method: get
+  operationId: getTasks:stream
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tasks:listenAsAgent
+  method: post
+  operationId: postTasks:listenAsAgent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tasks:streamAsAgent
+  method: get
+  operationId: getTasks:streamAsAgent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tasks/{task_id}/manualControlFrames:stream
+  method: get
+  operationId: getTasksByTaskIdManualControlFrames:stream
   x-agentic-access:
     action-class: connected
     consequence: read
