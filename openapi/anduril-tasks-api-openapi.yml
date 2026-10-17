@@ -213,14 +213,6 @@ paths:
       operationId: getTasksByTaskIdManualControlFrames:stream
       x-operation-id-source: derived
 components:
-  parameters:
-    TaskId:
-      name: task_id
-      in: path
-      required: true
-      description: Unique identifier of the task.
-      schema:
-        type: string
   schemas:
     Task:
       type: object
@@ -253,6 +245,14 @@ components:
           type: object
         assignee:
           type: object
+  parameters:
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      description: Unique identifier of the task.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

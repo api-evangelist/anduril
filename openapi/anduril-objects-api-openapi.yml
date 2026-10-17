@@ -150,14 +150,6 @@ paths:
       operationId: getObjects{objectPath}:metadata
       x-operation-id-source: derived
 components:
-  parameters:
-    ObjectPath:
-      name: object_path
-      in: path
-      required: true
-      description: Path identifying the object within the Lattice object store.
-      schema:
-        type: string
   schemas:
     ObjectMetadata:
       type: object
@@ -176,6 +168,14 @@ components:
           format: date-time
         checksum:
           type: string
+  parameters:
+    ObjectPath:
+      name: object_path
+      in: path
+      required: true
+      description: Path identifying the object within the Lattice object store.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http
