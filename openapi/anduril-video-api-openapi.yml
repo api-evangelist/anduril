@@ -1,0 +1,856 @@
+openapi: 3.2.0
+info:
+  title: REST Video API
+  version: 1.0.0
+servers:
+- url: https://example.developer.anduril.com
+  description: https://{server}
+tags:
+- name: Video
+paths:
+  /api/v1/video/egress_streams:
+    get:
+      operationId: video_listEgressStreams
+      summary: List egress streams
+      description: 'Returns a list of active egress stream objects.
+
+        Results are ordered by egress stream create time. If the
+
+        egress backend is unreachable, the listed streams might be stale or degraded.'
+      tags:
+      - Video
+      parameters:
+      - name: pageSize
+        in: query
+        description: "Desired number of egress streams per page. Defaults to 50 if left blank,\n and capped at 100. The response may contain fewer than max page size."
+        required: false
+        schema:
+          type: integer
+      - name: pageToken
+        in: query
+        description: "To retrieve the next page, pass the `nextPageToken` from the previous\n response. Leave empty for the first page.\n\n Keep the rest of the request identical between pages, otherwise the\n server may reject it."
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEgressStreamsResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      security:
+      - OAuth: []
+    post:
+      operationId: video_createEgressStream
+      summary: Create egress stream
+      description: 'Creates an egress stream that publishes a live stream to a downstream consumer.
+
+        A stream in `STREAM_STATUS_UNAVAILABLE` is rejected as not-live.'
+      tags:
+      - Video
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEgressStreamResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '409':
+          description: 'The supplied identifier is already in use. For ingress creation this means the
+
+            requested `ingressId` is taken by another stream; for egress creation an egress
+
+            stream already exists for the requested source.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '429':
+          description: 'A service-wide resource pool is exhausted. For egress this means a port could not be
+
+            allocated or the egress instance is at capacity. There is no per-caller quota or rate
+
+            limit, so this reflects deployment-wide capacity rather than caller behavior.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEgressStreamRequest'
+      security:
+      - OAuth: []
+  /api/v1/video/egress_streams/{egressId}:
+    get:
+      operationId: video_getEgressStream
+      summary: Get egress stream
+      description: Retrieves an egress stream object and its associated metadata.
+      tags:
+      - Video
+      parameters:
+      - name: egressId
+        in: path
+        description: Identifier of the egress stream to retrieve.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEgressStreamResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      security:
+      - OAuth: []
+    delete:
+      operationId: video_deleteEgressStream
+      summary: Delete egress stream
+      description: 'Deletes the egress stream for a live stream. Returns `NOT_FOUND` if no matching active
+
+        egress stream exists.'
+      tags:
+      - Video
+      parameters:
+      - name: egressId
+        in: path
+        description: Identifier of the egress stream to delete.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteEgressStreamResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      security:
+      - OAuth: []
+  /api/v1/video/ingress_streams:
+    get:
+      operationId: video_listIngressStreams
+      summary: List ingress streams
+      description: 'Returns a list of top level ingress stream objects, including ingress streams and internal
+
+        Anduril streams. Will only return active streams.
+
+        Results are ordered by ingress stream create time.'
+      tags:
+      - Video
+      parameters:
+      - name: pageSize
+        in: query
+        description: "Desired number of ingress streams per page. Defaults to 50 if left blank,\n and capped at 100. The response may contain fewer than requested."
+        required: false
+        schema:
+          type: integer
+      - name: pageToken
+        in: query
+        description: "To retrieve the next page, pass the `nextPageToken` from the previous\n response. Leave empty for the first page.\n\n Keep the rest of the request identical between pages, otherwise the\n server may reject it."
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListIngressStreamsResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '500':
+          description: 'An unexpected error occurred while processing the request. The ingress or egress
+
+            backend may have failed, or an underlying storage operation may have failed. Retry
+
+            with backoff.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      security:
+      - OAuth: []
+    post:
+      operationId: video_createIngressStream
+      summary: Create ingress stream
+      description: 'Creates a video ingress stream, returning metadata that you can use to stream live video to
+
+        Lattice. Exactly one of `rtsp` or `srt` must be set on the request.'
+      tags:
+      - Video
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateIngressStreamResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '409':
+          description: 'The supplied identifier is already in use. For ingress creation this means the
+
+            requested `ingressId` is taken by another stream; for egress creation an egress
+
+            stream already exists for the requested source.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '429':
+          description: 'A service-wide resource pool is exhausted. For egress this means a port could not be
+
+            allocated or the egress instance is at capacity. There is no per-caller quota or rate
+
+            limit, so this reflects deployment-wide capacity rather than caller behavior.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIngressStreamRequest'
+      security:
+      - OAuth: []
+  /api/v1/video/ingress_streams/{ingressId}:
+    get:
+      operationId: video_getIngressStream
+      summary: Get ingress stream
+      description: 'Retrieves a top level ingress stream object and its associated metadata. This includes
+
+        ingress streams and internal Anduril streams.'
+      tags:
+      - Video
+      parameters:
+      - name: ingressId
+        in: path
+        description: Identifier of the ingress stream to retrieve.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIngressStreamResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      security:
+      - OAuth: []
+    delete:
+      operationId: video_deleteIngressStream
+      summary: Delete ingress stream
+      description: 'Deletes a video ingress stream and transitions the stream to `STREAM_STATUS_ARCHIVED`.
+
+        Any egress streams consuming this stream will be stopped automatically.'
+      tags:
+      - Video
+      parameters:
+      - name: ingressId
+        in: path
+        description: Identifier of the ingress stream to delete.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteIngressStreamResponse'
+        '400':
+          description: 'The request was malformed or violated a precondition. Possible causes include missing
+
+            required fields, an unsupported value, an `oneof` with zero or more than one variant
+
+            set, a malformed URL, or a state-based precondition such as the source ingress stream
+
+            not being live.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '401':
+          description: 'The request was rejected because the bearer token was missing, malformed, or could
+
+            not be resolved to a user identity.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '403':
+          description: The caller is authenticated but lacks permission for the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '404':
+          description: The specified ingress or egress stream was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+        '503':
+          description: 'The service is temporarily unable to handle the request, such as during startup or
+
+            when a backend dependency is shutting down. The response carries a RetryInfo hint
+
+            (typically around 2 seconds); clients should retry per that hint.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/google.rpc.Status'
+      security:
+      - OAuth: []
+components:
+  schemas:
+    DeleteEgressStreamResponse:
+      type: object
+      properties: {}
+      title: DeleteEgressStreamResponse
+    RtspSettings:
+      type: object
+      properties:
+        url:
+          type: string
+          description: "The upstream RTSP URL the service should pull frames from. Must use\n the `rtsp://` scheme."
+      description: Settings for RTSP.
+      title: RtspSettings
+    SrtEgress:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL on which Lattice listens. The downstream consumer pulls from this URL.
+        sessionId:
+          type: string
+          description: Unique session identifier the consumer must supply on the SRT connection.
+      description: SRT egress connection details.
+      title: SrtEgress
+    IngressStream:
+      type: object
+      properties:
+        ingressId:
+          type: string
+          description: Unique identifier for the ingress stream.
+        title:
+          type: string
+          description: Human-readable title supplied at creation time.
+        status:
+          $ref: '#/components/schemas/IngressStreamStatus'
+          description: Current lifecycle status of the stream. See StreamStatus for the full state machine.
+        mpegTs:
+          $ref: '#/components/schemas/MpegTsIngress'
+        rtsp:
+          $ref: '#/components/schemas/RtspIngress'
+        srt:
+          $ref: '#/components/schemas/SrtIngress'
+        createdAt:
+          type: string
+          format: date-time
+          description: Wall-clock time the stream was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Wall-clock time the stream's status (STREAM_STATUS) was changed. The status can change based on the activity or\n the deletion of the stream."
+        egressIds:
+          type: array
+          items:
+            type: string
+          description: Identifiers of the egress streams currently consuming this ingress stream.
+      description: "An ingress stream represents a single source feeding frames into Lattice.\n Ingress streams are replicated across Lattice and visible anywhere in the deployment."
+      title: IngressStream
+    DeleteIngressStreamResponse:
+      type: object
+      properties: {}
+      title: DeleteIngressStreamResponse
+    GetEgressStreamResponse:
+      type: object
+      properties:
+        egressStream:
+          $ref: '#/components/schemas/EgressStream'
+          description: The egress stream corresponding to the requested `egressId`.
+      title: GetEgressStreamResponse
+    SrtIngress:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL the producer should push the SRT stream to.
+        sessionId:
+          type: string
+          description: "Unique session identifier the producer must include on the SRT connection. See\n SrtSettings for context."
+      description: "SRT ingress connection details. Returned to the producer so it knows where to\n push the stream."
+      title: SrtIngress
+    EgressStream:
+      type: object
+      properties:
+        egressId:
+          type: string
+          description: Service-generated identifier for the egress stream.
+        ingressId:
+          type: string
+          description: Identifier of the ingress stream this egress stream publishes.
+        rtsp:
+          $ref: '#/components/schemas/RtspEgress'
+        srt:
+          $ref: '#/components/schemas/SrtEgress'
+      description: "An egress stream publishes a single stream to a downstream consumer over a chosen\n transport."
+      title: EgressStream
+    CreateEgressStreamResponse:
+      type: object
+      properties:
+        egressId:
+          type: string
+          description: "Service-generated identifier for the new egress stream. Use it for subsequent\n `GetEgressStream` and `DeleteEgressStream` calls."
+        rtsp:
+          $ref: '#/components/schemas/RtspEgress'
+        srt:
+          $ref: '#/components/schemas/SrtEgress'
+      title: CreateEgressStreamResponse
+    SrtSettings:
+      type: object
+      properties:
+        passphrase:
+          type: string
+          description: Optional passphrase for the stream, set by the user, that applies AES encryption.
+      description: "The Lattice video service supports SRT protocol for push operations (ingress)\n and pull operations (egress).\n\n When configuring SRT for ingress, CreateIngressStreamResponse will\n return to the user a url to push to which contains a unique `sessionId` to use\n on the connection. If supplied, passphrase will be applied on incoming\n connections.\n\n When configuring SRT for egress, CreateEgressStreamResponse will\n return to the user a url from which to pull a stream. Use the supplied\n sessionId and passphrase in your StreamId if applicable.\n See the SRT documentation on Access Control for more information."
+      title: SrtSettings
+    google.protobuf.Any:
+      type: object
+      properties:
+        '@type':
+          type: string
+          description: The type of the serialized message.
+      description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+      title: google.protobuf.Any
+    RtspIngress:
+      type: object
+      properties:
+        url:
+          type: string
+          description: "The upstream RTSP URL. Lattice will pull from the supplied URL.\n The URL must be prefixed with `rtsp://`."
+      description: RTSP ingress connection details.
+      title: RtspIngress
+    MpegTsSettings:
+      type: object
+      properties: {}
+      description: "Settings for MPEG-TS ingress. Empty by default, the service allocates a UDP port\n from a service-wide pool and returns the push URL in CreateIngressStreamResponse.\n\n MPEG-TS ingress is supported only at the edge, in closed networks. When Lattice runs\n in a cloud environment reached over the public internet, MPEG-TS ingress may be\n disabled per deployment. When it is disabled, a CreateIngressStream request that\n selects `mpegTs` is rejected with a gRPC error rather than accepted, so callers should\n be prepared to fall back to RTSP or SRT. An MPEG-TS stream created at the edge can\n still be listed and inspected on the IngressStream read model even when cloud ingress\n is disabled."
+      title: MpegTsSettings
+    ListEgressStreamsResponse:
+      type: object
+      properties:
+        egressStreams:
+          type: array
+          items:
+            $ref: '#/components/schemas/EgressStream'
+          description: "The egress streams on this page. Up to `pageSize` entries\n (defaults to 50, capped at 100). Ordered by egress stream create time."
+        nextPageToken:
+          type: string
+          description: "Pass this back as `pageToken` to retrieve the next page.\n Empty when there are no more pages."
+      title: ListEgressStreamsResponse
+    google.rpc.Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+        message:
+          type: string
+          description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/google.protobuf.Any'
+          description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+      description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+      title: google.rpc.Status
+    RtspEgress:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The RTSP URL the downstream consumer should pull from.
+      description: RTSP egress connection details.
+      title: RtspEgress
+    GetIngressStreamResponse:
+      type: object
+      properties:
+        ingressStream:
+          $ref: '#/components/schemas/IngressStream'
+          description: The ingress stream corresponding to the requested `ingressId`.
+      title: GetIngressStreamResponse
+    CreateEgressStreamRequest:
+      type: object
+      properties:
+        ingressId:
+          type: string
+          description: Identifier of the live ingress stream to re-publish as an egress stream.
+        rtsp:
+          $ref: '#/components/schemas/RtspSettings'
+        srt:
+          $ref: '#/components/schemas/SrtSettings'
+      title: CreateEgressStreamRequest
+    CreateIngressStreamRequest:
+      type: object
+      properties:
+        ingressId:
+          type: string
+          description: "Caller-supplied identifier for the new stream. If omitted, the service generates a GUID.\n If supplied, a consistent and recognizable pattern is recommended. A common convention\n is a group prefix (organization, platform, or asset) followed by a specific identifier\n using underscore or dot as a separator, for example, `drone_1`, `vessel_2`, or\n `teamalpha.drone1`.\n\n When supplied, an ingressId must be between 4 and 36 characters long and use only\n printable ASCII characters with no spaces; the 36-character ceiling leaves room for a\n full GUID. A value outside that length range, or one containing spaces, control\n characters, or non-ASCII characters, is rejected, as is an ingressId that another\n ingress stream is already using."
+        title:
+          type: string
+          description: "Human-readable title for the stream. A title is required: surrounding whitespace is\n trimmed before it is stored, and what remains must be non-empty, valid UTF-8, and no\n longer than 64 characters. Otherwise the request is rejected."
+        mpegTs:
+          $ref: '#/components/schemas/MpegTsSettings'
+          description: "Receive an MPEG-TS push from the producer. The service allocates a UDP port and\n returns the URL the producer must push to in CreateIngressStreamResponse.\n\n MPEG-TS ingress is supported only at the edge, in closed networks. When Lattice\n runs in a cloud environment reached over the public internet, MPEG-TS ingress may\n be disabled per deployment. When it is disabled, a request that selects `mpegTs` is\n rejected with a gRPC error rather than accepted, so callers should be prepared to\n fall back to RTSP or SRT. An MPEG-TS stream created at the edge can still be listed\n and inspected on the IngressStream read model even when cloud ingress is disabled."
+        rtsp:
+          $ref: '#/components/schemas/RtspSettings'
+          description: Pull from a caller-supplied RTSP URL.
+        srt:
+          $ref: '#/components/schemas/SrtSettings'
+          description: "Receive an SRT push from the producer. The service returns a URL and sessionId\n in CreateIngressStreamResponse."
+      title: CreateIngressStreamRequest
+    CreateIngressStreamResponse:
+      type: object
+      properties:
+        ingressId:
+          type: string
+          description: "Identifier of the newly created ingress stream. Echoes the caller-supplied\n `ingressId` if one was provided, otherwise a service-generated GUID."
+        mpegTs:
+          $ref: '#/components/schemas/MpegTsIngress'
+          description: "Connection details for an MPEG-TS push. Only returned when the request selected\n `mpegTs` and MPEG-TS ingress is enabled for the deployment. MPEG-TS ingress is\n supported only at the edge, in closed networks; in a cloud environment reached over\n the public internet it may be disabled per deployment, in which case the create\n request is rejected and this field is never populated."
+        srt:
+          $ref: '#/components/schemas/SrtIngress'
+      title: CreateIngressStreamResponse
+    MpegTsIngress:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL that the producer should push the MPEG-TS stream to.
+      description: "MPEG-TS ingress connection details.\n\n MPEG-TS ingress is supported only at the edge, in closed networks; in a cloud\n environment reached over the public internet it may be disabled per deployment. These\n details are populated only when a stream was successfully created with `mpegTs`. An\n MPEG-TS stream created at the edge can still be listed and inspected on the\n IngressStream read model even when cloud ingress is disabled."
+      title: MpegTsIngress
+    IngressStreamStatus:
+      type: string
+      enum:
+      - STREAM_STATUS_UNSPECIFIED
+      - STREAM_STATUS_LIVE
+      - STREAM_STATUS_INACTIVE
+      - STREAM_STATUS_UNAVAILABLE
+      - STREAM_STATUS_ARCHIVED
+      description: Current lifecycle status of the stream. See StreamStatus for the full state machine.
+      title: IngressStreamStatus
+    ListIngressStreamsResponse:
+      type: object
+      properties:
+        ingressStreams:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngressStream'
+          description: "The ingress streams on this page. Up to `pageSize` entries\n (defaults to 50, capped at 100). Ordered by ingress stream create time."
+        nextPageToken:
+          type: string
+          description: "Pass this back as `pageToken` to retrieve the next page.\n Empty when there are no more pages."
+      title: ListIngressStreamsResponse
+  securitySchemes:
+    OAuth:
+      type: http
+      scheme: bearer

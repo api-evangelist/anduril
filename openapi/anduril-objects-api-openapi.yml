@@ -1,191 +1,389 @@
 openapi: 3.2.0
 info:
-  title: Anduril Lattice REST Objects API
-  version: v1
-  description: REST/JSON surface of the Anduril Lattice SDK.
-  contact:
-    name: Anduril Developer Portal
-    url: https://developer.anduril.com/
+  title: REST Objects API
+  version: 1.0.0
+  description: API to manipulate and interrogate object data on the local node, as well as list objects from the Lattice mesh.
 servers:
-- url: https://api.{environment}.anduril.com
-  description: Partner-specific Lattice environment
-  variables:
-    environment:
-      default: developer
-      description: Lattice environment subdomain provisioned for the partner
-security:
-- bearerAuth: []
-- oauth2ClientCredentials: []
+- url: https://example.developer.anduril.com
+  description: https://{server}
 tags:
 - name: Objects
-  description: Upload, fetch, list, and delete distributed binary objects.
+  description: API to manipulate and interrogate object data on the local node, as well as list objects from the Lattice mesh.
 paths:
-  /objects:
+  /api/v1/objects:
     get:
+      operationId: objects_listObjects
+      summary: List objects
+      description: Lists objects in your environment. You can define a prefix to list a subset of your objects. If you do not set a prefix, Lattice returns all available objects. By default this endpoint will list local objects only.
       tags:
       - Objects
-      summary: List objects
-      description: List objects with optional prefix filtering; returns local objects by default.
       parameters:
       - name: prefix
         in: query
+        description: Filters the objects based on the specified prefix path. If no path is specified, all objects are returned.
         required: false
         schema:
           type: string
-      - name: page_size
+      - name: sinceTimestamp
         in: query
+        description: 'Filters out objects whose `last_updated_at` is earlier than this timestamp.
+
+
+          `last_updated_at` records when an object arrived on the node that holds it, so this filter selects objects that arrived since the given time. It is not the time the object was authored: a copy that reaches a node later carries the later arrival time.
+
+          '
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: pageToken
+        in: query
+        description: Opaque cursor for continuing the same list request. Start a new listing without the previous cursor if any query parameter or listing scope changes.
+        required: false
+        schema:
+          type: string
+          format: string
+      - name: allObjectsInMesh
+        in: query
+        description: Lists objects across all environment nodes in a Lattice Mesh. When false or unset, only objects held by the local node are returned.
+        required: false
+        schema:
+          type: boolean
+      - name: maxPageSize
+        in: query
+        description: Sets the maximum number of items that should be returned on a single page.
         required: false
         schema:
           type: integer
-      - name: page_token
-        in: query
-        required: false
-        schema:
-          type: string
       responses:
         '200':
-          description: Page of object metadata records
+          description: Successful operation
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  objects:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ObjectMetadata'
-                  next_page_token:
-                    type: string
-      operationId: getObjects
-      x-operation-id-source: derived
-  /objects:listDeleted:
+                $ref: '#/components/schemas/ListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized to access resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - OAuth: []
+  /api/v1/objects/{objectPath}:
     get:
+      operationId: objects_getObject
+      summary: Get object
+      description: Fetches an object from your environment using the objectPath path parameter.
       tags:
       - Objects
-      summary: List deleted objects
-      description: Retrieve paginated records of force-distributed deleted objects with path and checksum pairs.
       parameters:
-      - name: page_size
-        in: query
+      - name: objectPath
+        in: path
+        description: The path of the object to fetch.
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9/_=\-.]*$
+      - name: Accept-Encoding
+        in: header
+        description: If set, Lattice will compress the response using the specified compression method. If the header is not defined, or the compression method is set to `identity`, no compression will be applied to the response.
         required: false
         schema:
-          type: integer
-      - name: page_token
-        in: query
+          $ref: '#/components/schemas/ApiV1ObjectsObjectPathGetParametersAcceptEncoding'
+      - name: Priority
+        in: header
+        description: 'Indicates a client''s preference for the priority of the response. The value is a structured header as defined in RFC 9218. If you do not set the header, Lattice uses the default priority set for the environment. Incremental delivery directives are not supported and will be ignored.
+
+          '
         required: false
         schema:
           type: string
       responses:
         '200':
-          description: Page of deleted object records
-      operationId: getObjects:listDeleted
-      x-operation-id-source: derived
-  /objects/{object_path}:
-    get:
-      tags:
-      - Objects
-      summary: Fetch object content
-      description: Fetch object content; supports compression and priority preferences.
-      parameters:
-      - $ref: '#/components/parameters/ObjectPath'
-      responses:
-        '200':
-          description: Object bytes
+          description: Successful operation
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
-      operationId: getObjectsByObjectPath
-      x-operation-id-source: derived
-    put:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized to access resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The specified resource was not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - OAuth: []
+    post:
+      operationId: objects_uploadObject
+      summary: Upload object
+      description: Uploads an object. The object must be 1 GiB or smaller.
       tags:
       - Objects
-      summary: Upload an object
-      description: Upload an object up to 1 GiB in size.
       parameters:
-      - $ref: '#/components/parameters/ObjectPath'
-      requestBody:
+      - name: objectPath
+        in: path
+        description: Path of the Object that is to be uploaded.
         required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9/_=\-.]*$
+      - name: Time-To-Live
+        in: header
+        description: An optional expiry TTL associated with an object. The value represents the number of nanoseconds the object will exist in the local store. If no TTL is supplied, the server applies a default TTL. In most cases, the default TTL is 90 days. However, it might be higher or lower, depending on the retention requirements of your environment.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: Distribution-Mode
+        in: header
+        description: Controls how the object is distributed across the mesh. If set to `force`, the object will be force distributed to all nodes. Force-distributed objects are subject to a size limit.
+        required: false
+        schema:
+          $ref: '#/components/schemas/ApiV1ObjectsObjectPathPostParametersDistributionMode'
+      responses:
+        '200':
+          description: Successful upload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PathMetadata'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Content too large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '507':
+          description: Insuccifient Storage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
         content:
           application/octet-stream:
             schema:
               type: string
               format: binary
-      responses:
-        '200':
-          description: Object stored
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ObjectMetadata'
-      operationId: putObjectsByObjectPath
-      x-operation-id-source: derived
+      security:
+      - OAuth: []
     delete:
+      operationId: objects_deleteObject
+      summary: Delete object
+      description: Deletes an object from your environment given the objectPath path parameter.
       tags:
       - Objects
-      summary: Delete an object
       parameters:
-      - $ref: '#/components/parameters/ObjectPath'
+      - name: objectPath
+        in: path
+        description: The path of the object to delete.
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9/_=\-.]*$
       responses:
         '204':
-          description: Object deleted
-      operationId: deleteObjectsByObjectPath
-      x-operation-id-source: derived
-  /objects/{object_path}:metadata:
-    get:
-      tags:
-      - Objects
-      summary: Get object metadata
-      description: Retrieve object metadata including size, expiry time, and last update timestamp.
-      parameters:
-      - $ref: '#/components/parameters/ObjectPath'
-      responses:
-        '200':
-          description: Object metadata
+          description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ObjectMetadata'
-      operationId: getObjects{objectPath}:metadata
-      x-operation-id-source: derived
+                type: object
+                properties: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized to access resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - OAuth: []
+    head:
+      operationId: objects_getObjectMetadata
+      summary: Get object metadata
+      description: Returns metadata for a specified object path. Use this to fetch metadata such as object size (size_bytes), its expiry time (expiry_time), or when it arrived on the node holding it (last_updated_at).
+      tags:
+      - Objects
+      parameters:
+      - name: objectPath
+        in: path
+        description: The path of the object to query.
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9/_=\-.]*$
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Objects_getObjectMetadata_Response_200'
+        '400':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                description: Any type
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                description: Any type
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: Any type
+      security:
+      - OAuth: []
 components:
   schemas:
-    ObjectMetadata:
+    ContentIdentifier:
       type: object
-      description: Metadata for a Lattice binary object.
       properties:
-        object_path:
+        path:
           type: string
+          description: 'A valid path must not contain the following:
+
+            - Spaces or Tabs
+
+            - Special characters other than underscore (_), dash (-), period (.) and slash (/)
+
+            - Non-ASCII characters such as accents or symbols
+
+            Paths must not start with a leading space.
+
+            '
+        checksum:
+          type: string
+          description: The SHA-256 checksum of this object.
+      required:
+      - path
+      - checksum
+      title: ContentIdentifier
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+      title: Error
+    Objects_getObjectMetadata_Response_200:
+      type: object
+      properties: {}
+      description: Empty response body
+      title: Objects_getObjectMetadata_Response_200
+    ListResponse:
+      type: object
+      properties:
+        path_metadatas:
+          type: array
+          items:
+            $ref: '#/components/schemas/PathMetadata'
+        next_page_token:
+          type: string
+      required:
+      - path_metadatas
+      title: ListResponse
+    ApiV1ObjectsObjectPathPostParametersDistributionMode:
+      type: string
+      enum:
+      - force
+      title: ApiV1ObjectsObjectPathPostParametersDistributionMode
+    PathMetadata:
+      type: object
+      properties:
+        content_identifier:
+          $ref: '#/components/schemas/ContentIdentifier'
         size_bytes:
           type: integer
-          format: int64
+          format: uint64
+        last_updated_at:
+          type: string
+          format: date-time
+          description: 'When this object arrived on the node that holds it, according to that node''s clock. Because an object is never modified in place, this is effectively the time the object was created on that node.
+
+
+            The value is local to the node holding the object and may differ when the same object is held on multiple nodes. It is not propagated from the node where the object originated.
+
+            '
         expiry_time:
           type: string
           format: date-time
-        last_update_time:
-          type: string
-          format: date-time
-        checksum:
-          type: string
-  parameters:
-    ObjectPath:
-      name: object_path
-      in: path
-      required: true
-      description: Path identifying the object within the Lattice object store.
-      schema:
-        type: string
+      required:
+      - content_identifier
+      - size_bytes
+      - last_updated_at
+      title: PathMetadata
+    ApiV1ObjectsObjectPathGetParametersAcceptEncoding:
+      type: string
+      enum:
+      - identity
+      - zstd
+      title: ApiV1ObjectsObjectPathGetParametersAcceptEncoding
   securitySchemes:
-    bearerAuth:
+    OAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
-      description: Bearer token issued via /oauth/token or partner-issued bearer.
-    oauth2ClientCredentials:
-      type: oauth2
-      description: OAuth 2.0 client credentials flow for service-to-service access.
-      flows:
-        clientCredentials:
-          tokenUrl: https://api.developer.anduril.com/oauth/token
-          scopes: {}

@@ -1,26 +1,22 @@
 {
   "provider": "anduril",
   "sources": [
-    "_original/anduril-openapi.yml"
+    "_original/anduril-openapi.json"
   ],
   "outputs": [
-    "anduril-entities-api-openapi.yml",
     "anduril-oauth-api-openapi.yml",
+    "anduril-entities-api-openapi.yml",
     "anduril-objects-api-openapi.yml",
-    "anduril-tasks-api-openapi.yml"
+    "anduril-tasks-api-openapi.yml",
+    "anduril-video-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "anduril-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "anduril-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+1 apis, 6 total)"
   ],
-  "skipped": [
-    "anduril-entities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "anduril-oauth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "anduril-objects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "anduril-tasks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

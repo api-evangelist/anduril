@@ -1,80 +1,109 @@
 openapi: 3.2.0
 info:
-  title: Anduril Lattice REST OAuth API
-  version: v1
-  description: REST/JSON surface of the Anduril Lattice SDK.
-  contact:
-    name: Anduril Developer Portal
-    url: https://developer.anduril.com/
+  title: REST OAuth API
+  version: 1.0.0
 servers:
-- url: https://api.{environment}.anduril.com
-  description: Partner-specific Lattice environment
-  variables:
-    environment:
-      default: developer
-      description: Lattice environment subdomain provisioned for the partner
-security:
-- bearerAuth: []
-- oauth2ClientCredentials: []
+- url: https://example.developer.anduril.com
+  description: https://{server}
 tags:
 - name: OAuth
-  description: Token issuance for client-credentials authentication.
 paths:
-  /oauth/token:
+  /api/v1/oauth/token:
     post:
+      operationId: oauth_getToken
+      summary: Get OAuth2 token
+      description: Gets a new short-lived token using the specified client credentials
       tags:
       - OAuth
-      summary: Issue an access token (client credentials grant)
-      description: Exchange client_id and client_secret for a short-lived bearer access token.
-      security: []
+      responses:
+        '200':
+          description: Access token response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth_getToken_Response_200'
+        '400':
+          description: Bad request or invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTokenRequestBadRequestError'
+        '401':
+          description: Unauthorized - client authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTokenRequestUnauthorizedError'
       requestBody:
-        required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
-              required:
-              - grant_type
-              - client_id
-              - client_secret
               properties:
                 grant_type:
                   type: string
                   enum:
                   - client_credentials
+                  description: The type of grant being requested
                 client_id:
                   type: string
+                  description: The client identifier
                 client_secret:
                   type: string
-                scope:
-                  type: string
-      responses:
-        '200':
-          description: Token issued
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                  token_type:
-                    type: string
-                  expires_in:
-                    type: integer
-      operationId: postOauthToken
-      x-operation-id-source: derived
+                  format: password
+                  description: The client secret
+              required:
+              - grant_type
+      security:
+      - OAuth: []
 components:
+  schemas:
+    GetTokenRequestBadRequestError:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+      required:
+      - error
+      title: GetTokenRequestBadRequestError
+    oauth_getToken_Response_200:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The access token
+        token_type:
+          type: string
+          description: The type of token (typically "Bearer")
+        expires_in:
+          type: integer
+          description: Lifetime of the access token in seconds
+        refresh_expires_in:
+          type: integer
+          description: Lifetime of the refresh token
+        not-before-policy:
+          type: integer
+          description: Enforce that a token cannot be used before a specific unixtime
+        scope:
+          type: string
+          description: The scope of the access token
+      required:
+      - access_token
+      - token_type
+      title: oauth_getToken_Response_200
+    GetTokenRequestUnauthorizedError:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+      required:
+      - error
+      title: GetTokenRequestUnauthorizedError
   securitySchemes:
-    bearerAuth:
+    OAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
-      description: Bearer token issued via /oauth/token or partner-issued bearer.
-    oauth2ClientCredentials:
-      type: oauth2
-      description: OAuth 2.0 client credentials flow for service-to-service access.
-      flows:
-        clientCredentials:
-          tokenUrl: https://api.developer.anduril.com/oauth/token
-          scopes: {}
