@@ -33,3 +33,32 @@
     sector: American Dynamism;Cultural Leadership Fund;Enterprise;Growth
   status: not-a-workflow
   arazzo: null
+- slug: anduril-gsa-multiple-award-schedule-mas
+  label: GSA Multiple Award Schedule (MAS)
+  partner_name: GSA Multiple Award Schedule (MAS)
+  category: federal procurement contract vehicle
+  type: register
+  channel: standard-directory
+  evidence: https://www.gsaelibrary.gsa.gov/ElibMain/contractorInfo.do?contractNumber=47QTCA25D009R&executeQuery=YES
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: GSA eLibrary, Multiple Award Schedule (MAS) IT SIN contractor listings
+    standard: GSA Multiple Award Schedule (IT Large Category)
+    spec_file: null
+    role: gsa-mas-contract-holder
+    registered_name: ANDURIL INDUSTRIES, INC.
+    register_id: 47QTCA25D009R
+    matched_domain: anduril.com
+    matched_by: domain
+    domain_source: web-address
+    sins:
+    - 511210 (software licenses)
+    contracts:
+    - 47QTCA25D009R
+    signal_note: 'participation only: a MAS award is a federal contract vehicle (GSA pre-negotiated terms and pricing),
+      not a conformance test. SINs and contract numbers are context, never counted'
+    detected_by: sweep-us-federal-api-programs.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
