@@ -235,6 +235,8 @@ apis:
   humanURL: https://developer.anduril.com/
   baseURL: https://developer.anduril.com
   tags:
+  - Video
+  tags_raw:
   - video
   properties:
   - type: OpenAPI
