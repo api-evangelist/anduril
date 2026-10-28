@@ -1,4 +1,4 @@
-# Anduril Industries (anduril)
+# Anduril Industries
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,102 +64,130 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Anduril Industries builds AI-defined defense products that pair purpose-built
-hardware with the Lattice software platform to give operators a unified,
-machine-speed view of the battlespace. The company's portfolio spans autonomous
-air, ground, and maritime systems (Ghost, Anvil, Bolt, ALTIUS, Dive-LD,
-Roadrunner) along with command-and-control software and counter-UAS systems.
-Lattice OS is the connective tissue: it ingests sensor and effector data across
-vendors and exposes it as a common data fabric for both Anduril operators and
-partner developers. A public Lattice Developer Portal and multi-language SDKs
-(Python, Go, Java, JavaScript) document the Entities, Tasks, and Objects APIs
-for partners integrating sensors, effectors, and mission applications. Access to
-live Lattice environments is partner-gated and subject to U.S. export controls
-(ITAR/EAR).
+Anduril Industries builds AI-defined defense products that pair purpose-built hardware with the Lattice software platform to give operators a unified, machine-speed view of the battlespace. The company's portfolio spans autonomous air, ground, and maritime systems (Ghost, Anvil, Bolt, ALTIUS, Dive-LD, Roadrunner) along with command-and-control software and counter-UAS systems. Lattice OS is the connective tissue: it ingests sensor and effector data across vendors and exposes it as a common data fabric for both Anduril operators and partner developers. A public Lattice Developer Portal and multi-language SDKs (Python, Go, Java, JavaScript) document the Entities, Tasks, and Objects APIs for partners integrating sensors, effectors, and mission applications. Access to live Lattice environments is partner-gated and subject to U.S. export controls (ITAR/EAR).
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/anduril/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/anduril/refs/heads/main/apis.yml)
+**Areas:** Defense · Autonomy · Lattice · Command and Control · C2 · Sensors · Effectors · Counter-UAS · Unmanned Systems · Mission Software · Edge AI · ITAR
 
-## Scope
+## Anduril Industries on APIs.io
 
-- **Type:** Index
-- **Position:** Provider
-- **Access:** 3rd-Party
+Everything profiled for Anduril Industries is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/anduril/](https://apis.io/providers/anduril/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (5)
 
-- Defense
-- Autonomy
-- Lattice
-- Command and Control
-- C2
-- Sensors
-- Effectors
-- Counter-UAS
-- Unmanned Systems
-- Mission Software
-- Edge AI
-- ITAR
+- [Anduril Lattice SDK](https://apis.io/apis/anduril/lattice-sdk/) — The Lattice SDK provides programmatic access to Anduril's Lattice platform so partners can publish entities, issue tasks to connected agents, and exchange…
+- [Anduril Industries Entities API](https://apis.io/apis/anduril/anduril-entities-api/) — Publish, query, override, and stream entities in the Lattice data fabric.
+- [Anduril Industries Objects API](https://apis.io/apis/anduril/anduril-objects-api/) — Upload, fetch, list, and delete distributed binary objects.
+- [Anduril Industries Tasks API](https://apis.io/apis/anduril/anduril-tasks-api/) — Create, update, query, cancel, and stream tasks; agent-side listen/stream endpoints.
+- [Anduril Industries O Auth API](https://apis.io/apis/anduril/anduril-oauth-api/) — Token issuance for client-credentials authentication.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-05-23
-- **Modified:** 2026-05-23
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Anduril Lattice SDK
+Which operations an agent can call, which act, and which need a human in the loop.
 
-The Lattice SDK provides programmatic access to Anduril's Lattice platform
-so partners can publish entities, issue tasks to connected agents, and
-exchange binary objects across a shared mission data fabric. The SDK
-supports both REST/JSON and gRPC/Protobuf transports, with OAuth client
-credentials or bearer-token authentication. Live API access is gated to
-qualified defense partners under export-control restrictions.
+- [Anduril Agentic Access](https://apis.io/agentic-access/anduril/anduril-agentic-access/)
 
-- **Human URL:** [https://developer.anduril.com/](https://developer.anduril.com/)
-- **Base URL:** `https://developer.anduril.com`
+#### Collections (5)
 
-#### Tags
+Postman and Open Collection request collections.
 
-- Lattice
-- Entities
-- Tasks
-- Objects
-- gRPC
-- REST
-- Defense SDK
-- Mission Autonomy
+- [Anduril Lattice REST API](https://apis.io/collections/anduril/open-anduril/)
+- [Anduril Lattice REST Entities API](https://apis.io/collections/anduril/open-anduril-entities-api/)
+- [Anduril Lattice REST Entities OAuth API](https://apis.io/collections/anduril/open-anduril-oauth-api/)
+- [Anduril Lattice REST Entities Objects API](https://apis.io/collections/anduril/open-anduril-objects-api/)
+- [Anduril Lattice REST Entities Tasks API](https://apis.io/collections/anduril/open-anduril-tasks-api/)
 
-#### Properties
+#### Security (3)
 
-- [Documentation](https://developer.anduril.com/)
-- [API Reference](https://developer.anduril.com/reference/overview/overview)
-- [Concepts](https://developer.anduril.com/guides/concepts/overview)
-- [Product Page](https://www.anduril.com/lattice/lattice-sdk/)
-- [S D K Python](https://github.com/anduril/lattice-sdk-python)
-- [S D K Go](https://github.com/anduril/lattice-sdk-go)
-- [S D K Java](https://github.com/anduril/lattice-sdk-java)
-- [S D K Java Script](https://github.com/anduril/lattice-sdk-javascript)
-- [Py P I](https://pypi.org/project/anduril-lattice-sdk/)
-- [Schema Registry](https://buf.build/anduril/lattice-sdk)
-- [GitHub Organization](https://github.com/anduril)
-- [Postman Collection](collections/anduril.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/anduril.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Authentication, trust centre, and vulnerability disclosure.
 
-## Common Properties
+- [Anduril Authentication](https://apis.io/security/anduril/anduril-authentication/)
+- [Anduril Domain Security](https://apis.io/security/anduril/anduril-domain-security/)
+- [Anduril Vulnerability Disclosure](https://apis.io/security/anduril/anduril-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Anduril Scopes](https://apis.io/scopes/anduril/anduril-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Anduril Plans Pricing](https://apis.io/plans/anduril/anduril-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Anduril Rate Limits](https://apis.io/rate-limits/anduril/anduril-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Anduril Finops](https://apis.io/finops/anduril/anduril-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.anduril.com/)
-- [Developer Portal](https://developer.anduril.com/)
-- [Lattice](https://www.anduril.com/lattice/)
-- [Lattice S D K](https://www.anduril.com/lattice/lattice-sdk/)
-- [Products](https://www.anduril.com/hardware/)
-- [Careers](https://www.anduril.com/careers/)
-- [Git Hub](https://github.com/anduril)
-- [Schema Registry](https://buf.build/anduril/lattice-sdk)
-- [LinkedIn](https://www.linkedin.com/company/anduril-industries/)
-- [News](https://www.anduril.com/article/)
+- [Blog](https://www.anduril.com/feed.xml)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 30.2** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 67.0 |
+| Contract quality | 44.1 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 40.5 |
+| Access clarity | 5.3 |
+
+**Agent readiness 19.6** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 27.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/anduril/](https://apis.io/providers/anduril/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Anduril Industries: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/anduril/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
